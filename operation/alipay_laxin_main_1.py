@@ -2,17 +2,13 @@
 """
 @CREATETIME: 2018/8/2 16:50 
 @AUTHOR: Chans
-@VERSION: 1.0
+@VERSION: 2.0
 """
 import pandas as pd
 import numpy as np
 import datetime
-match_info =  '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/match_info.xlsx'
-# detail = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/details.xlsx'
-detail ='/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/test_details_0802.xlsx'
-# detail = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/支付宝拉新佣金发放_0731_origin.xlsx'
-output_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_a_0803.xlsx'
-output_b_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_b_0803.xlsx'
+
+
 def read_match_info(file):
     pd_match_info = pd.read_excel(file,encoding = 'utf-8',header=0)
     columns_match_info = ['销售代表编码', '销售代表名称', '营业员手机号', '支付宝账号认证人', '营业员绑定支付宝', 'UID']
@@ -81,7 +77,19 @@ def output_uid(dataframe,indexx):
             continue
     return dataframe
 def write_to_excel_a(dataframe,output_path):
-    dataframe.to_excel(output_path,encoding='utf-8',index=False)
+    dataframe.to_excel(output_path,encoding='utf-8',index=False,sheet_name=r'匹配明细')
+
+def write_to_excel_c(dataframe,output_path):
+    dataframe.to_excel(output_path,encoding='utf-8',index=True,sheet_name=r'佣金计算')
+
+def empty_dataframe(shape,columns):
+    data = np.zeros(shape)
+    df = pd.DataFrame(data=data, columns=columns)
+    for content in columns:
+        df[content]=np.nan
+    return df
+
+
 
 def write_to_excel_b(dataframe,output_path,pd_length):
     columns = ['id', 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
@@ -91,10 +99,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
                'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)', 'createrId', 'createTime',
                'updaterId', 'updateTime', 'delflag', 'payNo', 'payTime', 'payDetail']
     col_length = len(columns)
-    data = np.zeros([pd_length,col_length])
-    df = pd.DataFrame(data=data, columns=columns)
-    for content in columns:
-        df[content]=np.nan
+    df = empty_dataframe([pd_length,col_length],columns)
     date = datetime.datetime.now().strftime('%Y%m%d')
     for i_index in range(pd_length):
         # print(i_index,'{a}_{b}'.format(a=date ,b=str(dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])))
@@ -105,28 +110,42 @@ def write_to_excel_b(dataframe,output_path,pd_length):
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
     df['status(固定值-1)'] = -1
-    df.to_excel(output_path, encoding='utf-8', index=False)
+    df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
+    return df
+
+def pivot_group_by(dataframe,output_path):
+    pd_output = dataframe.fillna(2)
+    cols =  pd_output.columns.values.tolist()
+    cols.remove('money(发好多钱)')
+    y = pd.pivot_table(pd_output,index=cols,values = ['money(发好多钱)'],aggfunc=np.sum)
+    write_to_excel_c(y,output_path)
+
+if __name__ == '__main__':
+    # -----paths-----
+    match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/match_info.xlsx'
+    detail = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/test_details_0802.xlsx'
+    output_a_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_a_0803.xlsx'
+    output_b_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_b_0803.xlsx'
+    output_c_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_c_0803.xlsx'
+    output_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_0803.xlsx'
 
 
+    # -----main-----
+    pd_match_info_aim = read_match_info(match_info)
+    pd_detail = read_detail(detail)
+    pd_detail = connection_with_match_info(pd_detail)
+    index1 = get_vacant_index(pd_detail,'商户对应UID')
+    index2 = get_vacant_index(pd_detail,'销售代表对应UID')
+    pd_detail = create_new_line(pd_detail,'打款账户(营业员手机号/商户编码/销售代表编码)')
+    pd_detail = write_index_line(pd_detail,index1,'打款账户(营业员手机号/商户编码/销售代表编码)','商户编码')
+    pd_detail = write_index_line(pd_detail,index2,'打款账户(营业员手机号/商户编码/销售代表编码)','销售代表编码')
+    index3 = get_position_index(pd_detail,[-1,])
+    pd_detail = create_new_line(pd_detail,'打款UID')
+    pd_detail = output_uid(pd_detail,index3)
+    write_to_excel_a(pd_detail,output_test)
+    # c = ['日期', '二级pid', '数量', '单价', '佣金', '营业员姓名', '营业员手机号', '营业员支付宝账号',
+    #  '营业员支付宝UID', '所属区域', '门店编码', '门店名称', '商户编码', '商户名称', '销售代表编码', '销售代表名称','属性']
 
-pd_match_info_aim = read_match_info(match_info)
-pd_detail = read_detail(detail)
-pd_detail = connection_with_match_info(pd_detail)
-index1 = get_vacant_index(pd_detail,'商户对应UID')
-index2 = get_vacant_index(pd_detail,'销售代表对应UID')
-pd_detail = create_new_line(pd_detail,'打款账户(营业员手机号/商户编码/销售代表编码)')
-pd_detail = write_index_line(pd_detail,index1,'打款账户(营业员手机号/商户编码/销售代表编码)','商户编码')
-pd_detail = write_index_line(pd_detail,index2,'打款账户(营业员手机号/商户编码/销售代表编码)','销售代表编码')
-index3 = get_position_index(pd_detail,[-1,])
-pd_detail = create_new_line(pd_detail,'打款UID')
-pd_detail = output_uid(pd_detail,index3)
-write_to_excel_a(pd_detail,output_test)
-# c = ['日期', '二级pid', '数量', '单价', '佣金', '营业员姓名', '营业员手机号', '营业员支付宝账号',
-#  '营业员支付宝UID', '所属区域', '门店编码', '门店名称', '商户编码', '商户名称', '销售代表编码', '销售代表名称','属性']
+    pd_output = write_to_excel_b(pd_detail,output_test,pd_length=len(pd_detail))
 
-pd_length = len(pd_detail)
-
-
-
-
-write_to_excel_b(pd_detail,output_b_test,pd_length)
+    pivot_group_by(pd_output,output_test)
