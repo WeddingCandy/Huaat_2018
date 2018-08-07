@@ -21,15 +21,13 @@ def read_detail(file):
     return  pd_detail
 
 def connection_with_match_info(dataframe,dataframe_info):
+    dataframe_info.drop_duplicates(dataframe_info.columns.tolist(),keep='first',inplace=True)
     pd_detail = dataframe.merge(dataframe_info[['销售代表编码', 'UID']], how='left', left_on='businessid', right_on='销售代表编码')
     pd_detail.rename(columns={ 'UID': '商户对应UID'}, inplace=True)
-    pd_detail = pd_detail.drop(['销售代表编码'],axis = 1)
-    columns = (list(pd_detail.columns))[0:-2]
-    columns.extend(list(pd_detail.columns)[-1:])
-    pd_detail = pd_detail[columns]
-
+    pd_detail = pd_detail.drop(['销售代表编码'], axis=1)
     pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', 'UID']], how='left', left_on='agentid', right_on='销售代表编码')
     pd_detail.rename(columns={'UID': '销售代表对应UID'}, inplace=True)
+    pd_detail = pd_detail.drop(['销售代表编码'], axis=1)
     return pd_detail
 
 def get_vacant_index(dataframe,line_name):
@@ -49,15 +47,15 @@ def write_index_line(dataframe,index,aim_line,from_line):
     return dataframe
 
 def output_uid(dataframe,indexx):
-    for content in indexx:
-        if (dataframe['商户对应UID'][content] is np.nan == False) & (dataframe['销售代表对应UID'][content] is np.nan == False) == True:
+    for content in range(indexx):
+        if (dataframe['商户对应UID'][content] is not np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan ) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['businessid'][content]
-        elif (dataframe['商户对应UID'][content] is np.nan == False) & (dataframe['销售代表对应UID'][content] is np.nan == True) == True:
+        elif (dataframe['商户对应UID'][content] is not np.nan ) & (dataframe['销售代表对应UID'][content] is np.nan ) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['businessid'][content]
-        elif (dataframe['商户对应UID'][content] is np.nan == True) & (dataframe['销售代表对应UID'][content] is np.nan == False) == True:
+        elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['agentid'][content]
         # elif (dataframe['商户对应UID'][content] is np.nan == True) & (dataframe['销售代表对应UID'][content] is np.nan == True) == True:
-        else:
+        elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is  np.nan) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['assistanttel'][content]
     # 原来版本
     # for index in dataframe.index :
@@ -114,9 +112,10 @@ def write_to_excel_b(dataframe,output_path,pd_length):
     col_length = len(columns)
     df = empty_dataframe([pd_length,col_length],columns)
     date = datetime.datetime.now().strftime('%Y%m%d')
+
     for i_index in range(pd_length):
         # print('{a}_{b}'.format(a=date ,b=str(dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])))
-        a = "'{a}_{b}".format(a = date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
+        a = "${a}_{b}".format(a = date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
         # patten =re.compile('__')
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
             # patten.sub('_',a)
@@ -167,6 +166,11 @@ def search_new_input_file(file_path):
 if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
+
+    # /Users/Apple/Desktop/working/8 华院项目/运营自动化程序/ 路径可修改
+    # 其中/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input 需要把match_info.xlsx 和 每天的明细表放到input文件夹下
+    # 明细表命名规则：[任意字母+任意数字+"-"+"_"](前天日期0801、1201、0229等).xlsx
+    # {} 包含大括号的文件名除了括号和文件尾缀.xlsx 不可修改，其余可修改，如："打款明细表1_{}.xlsx"
     match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input/match_info.xlsx'
     file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input'
     file_name = search_new_input_file(file_path)
@@ -180,15 +184,18 @@ if __name__ == '__main__':
     # -----main-----
     pd_match_info_aim = read_match_info(match_info)
     pd_detail = read_detail(detail)
+    # print(len(pd_detail),pd_detail.info())
     pd_detail = connection_with_match_info(pd_detail,pd_match_info_aim)
     index1 = get_vacant_index(pd_detail,'商户对应UID')
     index2 = get_vacant_index(pd_detail,'销售代表对应UID')
     pd_detail = create_new_line(pd_detail,'打款账户(营业员手机号/商户编码/销售代表编码)')
     pd_detail = write_index_line(pd_detail,index1,'打款账户(营业员手机号/商户编码/销售代表编码)','businessid')
     pd_detail = write_index_line(pd_detail,index2,'打款账户(营业员手机号/商户编码/销售代表编码)','agentid')
-    index3 = get_position_index(pd_detail,[-1,])
+    # index3 = get_position_index(pd_detail,[-1,])
+    index3 = len(pd_detail)
     pd_detail = create_new_line(pd_detail,'打款UID')
     pd_detail = output_uid(pd_detail,index3)
+    # print(len(pd_detail), pd_detail.info())
     write_to_excel_a(pd_detail,output_a_test)
     # c = ['日期', '二级pid', '数量', '单价', '佣金', '营业员姓名', '营业员手机号', '营业员支付宝账号',
     #  '营业员支付宝UID', '所属区域', '门店编码', '门店名称', '商户编码', '商户名称', '销售代表编码', '销售代表名称','属性']

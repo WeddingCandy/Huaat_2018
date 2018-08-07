@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="153c1636-56a2-42e7-9e05-234fb3169e84" name="Default" comment="30th May in Mac Office v1">
+      <change afterPath="$PROJECT_DIR$/operation/phone_num_dataset_split.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/labels_auto_classification_stacking/jieba_cut_fliter.py" beforeDir="false" afterPath="$PROJECT_DIR$/labels_auto_classification_stacking/jieba_cut_fliter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/operation/alipay_laxin_main_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/operation/alipay_laxin_main_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,29 +18,31 @@
     <session id="-2071537918">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="272" />
-          <entry key="py" value="1241" />
+          <entry key="Python Console" value="317" />
+          <entry key="py" value="2413" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1513" />
+          <entry key="Python" value="2730" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="2" />
+          <entry key="py" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="2" />
+          <entry key="Python" value="5" />
         </counts>
       </usages-collector>
     </session>
@@ -46,7 +52,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/word_embedding_for_tensorflow/test_chapter4.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1140">
+            <state relative-caret-position="1185">
               <caret line="79" column="56" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="56" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -58,7 +64,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/main3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
+            <state relative-caret-position="885">
               <caret line="59" column="19" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
               <folding>
                 <element signature="e#15#30#0" expanded="true" />
@@ -70,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/word_embedding_for_tensorflow/rnn_for_labels_classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2370">
+            <state relative-caret-position="2415">
               <caret line="161" column="10" selection-start-line="161" selection-start-column="10" selection-end-line="161" selection-end-column="10" />
               <folding>
                 <element signature="e#94#117#0" expanded="true" />
@@ -82,14 +88,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="125" column="61" selection-start-line="125" selection-start-column="61" selection-end-line="125" selection-end-column="61" />
+            <state relative-caret-position="180">
+              <caret line="157" column="21" selection-start-line="157" selection-start-column="21" selection-end-line="157" selection-end-column="21" />
               <folding>
                 <element signature="e#90#109#0" expanded="true" />
-                <element signature="e#2613#2619#0" />
-                <marker date="1533543132622" expanded="true" signature="4933:5083" ph="..." />
-                <marker date="1533543132622" expanded="true" signature="6886:7032" ph="..." />
-                <marker date="1533543132622" expanded="true" signature="7069:7551" ph="..." />
+                <marker date="1533641578088" expanded="true" signature="5020:5170" ph="..." />
               </folding>
             </state>
           </provider>
@@ -98,8 +101,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/label_auto/dataset_train_leve1_doc2vec_v2.2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
+            <state relative-caret-position="480">
               <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/preprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/jieba_cut_fliter.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="430">
+              <caret line="38" column="12" lean-forward="true" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/operation/phone_num_dataset_split.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="51" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -142,6 +172,8 @@
       <find>n_folds</find>
       <find>train_op</find>
       <find>no_op</find>
+      <find>'打款UID'</find>
+      <find>columns</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -171,6 +203,9 @@
         <option value="$PROJECT_DIR$/word_embedding_for_tensorflow/reader.py" />
         <option value="$PROJECT_DIR$/word_embedding_for_tensorflow/test_chapter4.py" />
         <option value="$PROJECT_DIR$/word_embedding_for_tensorflow/rnn_for_labels_classification.py" />
+        <option value="$PROJECT_DIR$/operation/phone_num_dataset_split.py" />
+        <option value="$PROJECT_DIR$/labels_auto_classification_stacking/preprocess.py" />
+        <option value="$PROJECT_DIR$/labels_auto_classification_stacking/jieba_cut_fliter.py" />
         <option value="$PROJECT_DIR$/operation/alipay_laxin_main_1.py" />
       </list>
     </option>
@@ -186,7 +221,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -197,17 +231,18 @@
             <path>
               <item name="Huaat_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Huaat_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="label_auto" type="462c0819:PsiDirectoryNode" />
+              <item name="operation" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Huaat_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Huaat_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="operation" type="462c0819:PsiDirectoryNode" />
+              <item name="word_embedding_for_tensorflow" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -284,7 +319,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pingan_human_fance_capture_result_transform_v2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="phone_num_dataset_split" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Huaat2018" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -292,11 +327,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pingan_face_capture" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/operation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pingan_face_capture/pingan_human_fance_capture_result_transform_v2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/operation/phone_num_dataset_split.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -348,19 +383,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.pingan_human_fance_capture_result_transform_v2" />
       <item itemvalue="Python.test_chapter4" />
       <item itemvalue="Python.main3" />
       <item itemvalue="Python.rnn_for_labels_classification" />
       <item itemvalue="Python.alipay_laxin_main_1" />
+      <item itemvalue="Python.phone_num_dataset_split" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.alipay_laxin_main_1" />
+        <item itemvalue="Python.phone_num_dataset_split" />
         <item itemvalue="Python.rnn_for_labels_classification" />
         <item itemvalue="Python.test_chapter4" />
         <item itemvalue="Python.main3" />
-        <item itemvalue="Python.pingan_human_fance_capture_result_transform_v2" />
       </list>
     </recent_temporary>
   </component>
@@ -552,13 +587,13 @@
     <frame x="0" y="23" width="1280" height="773" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.23113582" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23113582" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info id="Python Console" order="3" weight="0.34312946" />
+      <window_info id="Python Console" order="3" weight="0.4217633" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4988086" visible="true" weight="0.37444934" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4988086" weight="0.39941263" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39940828" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -848,9 +883,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/frame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="2766" column="18" lean-forward="true" selection-start-line="2766" selection-start-column="18" selection-end-line="2766" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/word_embedding_for_tensorflow/test_chapter4.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
+        <state relative-caret-position="1185">
           <caret line="79" column="56" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="56" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
@@ -860,7 +902,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/main3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
+        <state relative-caret-position="885">
           <caret line="59" column="19" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
           <folding>
             <element signature="e#15#30#0" expanded="true" />
@@ -870,7 +912,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/word_embedding_for_tensorflow/rnn_for_labels_classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2370">
+        <state relative-caret-position="2415">
           <caret line="161" column="10" selection-start-line="161" selection-start-column="10" selection-end-line="161" selection-end-column="10" />
           <folding>
             <element signature="e#94#117#0" expanded="true" />
@@ -892,30 +934,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/frame.py">
+    <entry file="file://$PROJECT_DIR$/label_auto/dataset_train_leve1_doc2vec_v2.2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="2766" column="18" lean-forward="true" selection-start-line="2766" selection-start-column="18" selection-end-line="2766" selection-end-column="18" />
+        <state relative-caret-position="480">
+          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/label_auto/dataset_train_leve1_doc2vec_v2.2.py">
+    <entry file="file://$PROJECT_DIR$/operation/phone_num_dataset_split.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="45" />
+        <state relative-caret-position="315">
+          <caret line="21" column="51" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labels_auto_classification_stacking/jieba_cut_fliter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="38" column="12" lean-forward="true" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="125" column="61" selection-start-line="125" selection-start-column="61" selection-end-line="125" selection-end-column="61" />
+        <state relative-caret-position="180">
+          <caret line="157" column="21" selection-start-line="157" selection-start-column="21" selection-end-line="157" selection-end-column="21" />
           <folding>
             <element signature="e#90#109#0" expanded="true" />
-            <element signature="e#2613#2619#0" />
-            <marker date="1533543132622" expanded="true" signature="4933:5083" ph="..." />
-            <marker date="1533543132622" expanded="true" signature="6886:7032" ph="..." />
-            <marker date="1533543132622" expanded="true" signature="7069:7551" ph="..." />
+            <marker date="1533641578088" expanded="true" signature="5020:5170" ph="..." />
           </folding>
         </state>
       </provider>

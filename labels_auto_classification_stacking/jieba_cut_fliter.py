@@ -23,12 +23,13 @@ def input(trainname):
                 print("error:", line, count)
             line=f.readline()
     return traindata
+
 start = time.clock()
-root_path = '/Volumes/d/data/sougoudata_ori/'
-filepath = root_path+'test_querylist.csv'
+root_path = '/Users/Apple/datadata/sougoudata_ori'
+filepath = root_path+ os.sep+'test_querylist.csv'
 QueryList = input(filepath)
 
-writepath =root_path+ 'testfile_gb.csv'
+writepath = root_path+ os.sep+'testfile_gb.csv'
 csvfile = open(writepath, 'w',encoding='gb18030')
 #parallel:speed up
 jieba.enable_parallel(processnum=4)
