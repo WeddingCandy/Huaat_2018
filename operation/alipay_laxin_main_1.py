@@ -130,7 +130,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
     return df
 
 def pivot_group_by(dataframe,output_path):
-    pd_output = dataframe.fillna(2)
+    pd_output = dataframe.fillna('$')
     cols =  pd_output.columns.values.tolist()
     cols.remove('money(发好多钱)')
     y = pd.pivot_table(pd_output,index=cols,values = ['money(发好多钱)'],aggfunc=np.sum)
@@ -178,7 +178,6 @@ if __name__ == '__main__':
     output_a_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_a_{}.xlsx'.format(date)
     output_b_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_b_{}.xlsx'.format(date)
     output_c_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_c_{}.xlsx'.format(date)
-    # output_test = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/output_test_0803.xlsx'
 
 
     # -----main-----
