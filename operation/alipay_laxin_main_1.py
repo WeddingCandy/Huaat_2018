@@ -72,20 +72,20 @@ def output_uid(dataframe,indexx):
     #         continue
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
-            dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
-            dataframe['备注：结算方式'][index] = '销售代表'
+            dataframe['打款UID'][index] = 'a'+ str(dataframe['销售代表对应UID'][index])
+            dataframe['备注：结算方式'][index] = dataframe['agentname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
-            dataframe['备注：结算方式'][index] = '商户'
+            dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
+            dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
-            dataframe['备注：结算方式'][index] = '商户'
+            dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
+            dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]  is not np.nan ) )== True :
-            dataframe['打款UID'][index] = str(dataframe['aliacccountid'][index])
-            dataframe['备注：结算方式'][index] = '营业员'
+            dataframe['打款UID'][index] = 'a'+ str(dataframe['aliacccountid'][index])
+            dataframe['备注：结算方式'][index] = dataframe['ass_name'][index]
             continue
     return dataframe
 
@@ -122,7 +122,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
-        a = "${a}_{b}".format(a = today_date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
+        a = "${a}_{b}".format(a = insert_date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
             # patten.sub('_',a)
