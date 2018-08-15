@@ -156,7 +156,7 @@ def search_new_input_file(file_path):
     import os
     import re
     import datetime
-    date = (datetime.date.today() + datetime.timedelta(days = -1)).strftime('%m%d')
+    date = (datetime.date.today() ).strftime('%m%d') #+ datetime.timedelta(days = -1)
 
     all_files = []
     aim_file =''
@@ -178,11 +178,17 @@ if __name__ == '__main__':
     # 其中/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input 需要把match_info.xlsx 和 每天的明细表放到input文件夹下
     # 明细表命名规则：[任意字母+任意数字+"-"+"_"](前天日期0801、1201、0229等).xlsx
     # {} 包含大括号的文件名除了括号和文件尾缀.xlsx 不可修改，其余可修改，如："打款明细表1_{}.xlsx"
-    match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input/match_info.xlsx'
-    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input'
-    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/out'
+    match_info = r'C:\Users\10854\Desktop\laxin\alipay\input\match_info.xlsx'
+    input_file_path = r'C:\Users\10854\Desktop\laxin\alipay\input'
+    output_file_path = r'C:\Users\10854\Desktop\laxin\alipay\output'
     file_name = search_new_input_file(input_file_path)
-    detail = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input/{}'.format(file_name)
+    detail = input_file_path + os.sep + '{}'.format(file_name)
+
+    # match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input/match_info.xlsx'
+    # input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input'
+    # # output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/out'
+    # file_name = search_new_input_file(input_file_path)
+    # detail = input_file_path+ os.sep+'income_{}'.format(file_name)
 
     output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
     # output_c_test = output_file_path + os.sep + '打款明细_{}.xlsx'.format(date)
