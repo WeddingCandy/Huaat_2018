@@ -56,35 +56,22 @@ def output_uid(dataframe,indexx):
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['agentid'][content]
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is  np.nan) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['assistanttel'][content]
-    # 原来版本
-    # for index in dataframe.index :
-    #     if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
-    #         dataframe['打款UID'][index] = 'a'+ str(dataframe['销售代表对应UID'][index])
-    #         continue
-    #     elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-    #         dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
-    #         continue
-    #     elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-    #         dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
-    #         continue
-    #     elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]  is not np.nan ) )== True :
-    #         dataframe['打款UID'][index] = 'a'+ str(dataframe['营业员支付宝UID'][index])
-    #         continue
+
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
-            dataframe['打款UID'][index] = 'a'+ str(dataframe['销售代表对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
             dataframe['备注：结算方式'][index] = dataframe['agentname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
             dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = 'a'+ str(dataframe['商户对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
             dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]  is not np.nan ) )== True :
-            dataframe['打款UID'][index] = 'a'+ str(dataframe['aliacccountid'][index])
+            dataframe['打款UID'][index] = str(dataframe['aliacccountid'][index])
             dataframe['备注：结算方式'][index] = dataframe['ass_name'][index]
             continue
     return dataframe
@@ -156,7 +143,7 @@ def search_new_input_file(file_path):
     import os
     import re
     import datetime
-    date = (datetime.date.today() ).strftime('%m%d') #+ datetime.timedelta(days = -1)
+    date = (datetime.date.today() + datetime.timedelta(days = -1)).strftime('%m%d') #+ datetime.timedelta(days = -1)
 
     all_files = []
     aim_file =''
@@ -173,25 +160,21 @@ def search_new_input_file(file_path):
 if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
-
-    # /Users/Apple/Desktop/working/8 华院项目/运营自动化程序/ 路径可修改
-    # 其中/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input 需要把match_info.xlsx 和 每天的明细表放到input文件夹下
-    # 明细表命名规则：[任意字母+任意数字+"-"+"_"](前天日期0801、1201、0229等).xlsx
-    # {} 包含大括号的文件名除了括号和文件尾缀.xlsx 不可修改，其余可修改，如："打款明细表1_{}.xlsx"
-    match_info = r'C:\Users\10854\Desktop\laxin\alipay\input\match_info.xlsx'
-    input_file_path = r'C:\Users\10854\Desktop\laxin\alipay\input'
-    output_file_path = r'C:\Users\10854\Desktop\laxin\alipay\output'
-    file_name = search_new_input_file(input_file_path)
-    detail = input_file_path + os.sep + '{}'.format(file_name)
-
-    # match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input/match_info.xlsx'
-    # input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/input'
-    # # output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/out'
+    # input_file_path = r'C:\Users\10854\Desktop\laxin\alipay\input'
+    # output_file_path = r'C:\Users\10854\Desktop\laxin\alipay\output'
+    # match_info = input_file_path + os.sep + 'match_info.xlsx'
     # file_name = search_new_input_file(input_file_path)
-    # detail = input_file_path+ os.sep+'income_{}'.format(file_name)
+    # detail = input_file_path + os.sep + '{}'.format(file_name)
+
+
+    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/input'
+    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/out'
+    match_info = input_file_path + os.sep + 'match_info.xlsx'
+    file_name = search_new_input_file(input_file_path)
+    detail = input_file_path+ os.sep+'{}'.format(file_name)
 
     output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
-    # output_c_test = output_file_path + os.sep + '打款明细_{}.xlsx'.format(date)
+
 
 
     # -----main-----

@@ -77,16 +77,16 @@ def output_uid(dataframe,indexx):
             dataframe['打款账户'][content] = dataframe['营业员支付宝账户'][content]
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
-            dataframe['打款UID'][index] = '@'+str(dataframe['销售代表对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = '@'+str(dataframe['商户对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款UID'][index] = '@'+str(dataframe['商户对应UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
-            dataframe['打款UID'][index] = '@'+str(dataframe['营业员UID'][index])
+            dataframe['打款UID'][index] = str(dataframe['营业员UID'][index])
             continue
     return dataframe
 
@@ -99,12 +99,12 @@ def account_name_way(dataframe):
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
-            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝认证人'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
             dataframe['备注：结算方式'][index] = '商户'
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
-            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝认证人'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
             dataframe['备注：结算方式'][index] = '商户'
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
@@ -117,8 +117,8 @@ def account_name_way(dataframe):
 
 def write_to_excel_a(dataframe,output_path):
     for index in range(len(dataframe)):
-        dataframe.loc[index:index, ['营业员UID']] = '@@' + str(dataframe.loc[index:index,['营业员UID']].values[0][0])
-        dataframe.loc[index:index, ['商户UID']] = '@@' + str(dataframe.loc[index:index, ['商户UID']].values[0][0])
+        dataframe.loc[index:index, ['营业员UID']] = str(dataframe.loc[index:index,['营业员UID']].values[0][0])
+        dataframe.loc[index:index, ['商户UID']] =  str(dataframe.loc[index:index, ['商户UID']].values[0][0])
         if index <3:
             print(dataframe.loc[index:index,['营业员UID']].values[0][0])
     # dataframe[['营业员UID']] = ['@%s' % d for d in dataframe[['营业员UID']]]
@@ -149,7 +149,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
 
     for i_index in range(pd_length):
         # insert_date = dataframe.iloc[i_index:i_index+1,0:1].values
-        insert_date2 = str(dataframe.iloc[i_index:i_index + 1, 1:2].values[0][0])
+        insert_date2 = str(dataframe.loc[i_index:i_index , ['日期']].values[0][0])
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
 #         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
 #         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
@@ -179,7 +179,7 @@ if __name__ == '__main__':
     match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input/match_info.xlsx'
     input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
     output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
-    output_a_test = output_file_path + os.sep + 'output_taobao_a_{}.xlsx'.format(date)
+    output_a_test = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)
 
     file_name = search_new_input_file(input_file_path)
     detail = input_file_path + os.sep + '{}'.format(file_name)
@@ -192,8 +192,8 @@ if __name__ == '__main__':
     pd_detail = create_new_line(pd_detail,'打款账户')
     index1 = get_vacant_index(pd_detail,'商户对应UID')
     index2 = get_vacant_index(pd_detail,'销售代表对应UID')
-    pd_detail = write_index_line(pd_detail,index1,'打款账户','商户编码')
-    pd_detail = write_index_line(pd_detail,index2,'打款账户','合并销售代表编码')
+    pd_detail = write_index_line(pd_detail,index1,'打款账户','商户支付宝账户')
+    pd_detail = write_index_line(pd_detail,index2,'打款账户','销售代表支付宝账户')
     pd_detail = create_new_line(pd_detail,'打款UID')
 
 
@@ -209,5 +209,5 @@ if __name__ == '__main__':
 
     output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
     pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
-    output_c_test = output_file_path + os.sep + '打款明细_{}.xlsx'.format(date)
+    output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
     pivot_group_by(pd_output,output_c_test)
