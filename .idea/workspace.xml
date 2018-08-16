@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="153c1636-56a2-42e7-9e05-234fb3169e84" name="Default" comment="30th May in Mac Office v1">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/operation/alipay_laxin_main_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/operation/alipay_laxin_main_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/operation/taobao_laxin_main_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/operation/taobao_laxin_main_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -77,11 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1819">
-              <caret line="86" column="40" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
-              <folding>
-                <element signature="e#90#109#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="120">
+              <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -943,11 +938,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1819">
-          <caret line="86" column="40" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
-          <folding>
-            <element signature="e#90#109#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="120">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
         </state>
       </provider>
     </entry>
