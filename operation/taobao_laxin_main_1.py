@@ -74,7 +74,7 @@ def output_uid(dataframe,indexx):
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan) == True:
             dataframe['打款账户'][content] = dataframe['销售代表编码'][content]
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is  np.nan) == True:
-            dataframe['打款账户'][content] = dataframe['营业员支付宝账户'][content]
+            dataframe['打款账户'][content] = dataframe['营业员电话'][content]
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
