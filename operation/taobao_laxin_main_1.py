@@ -119,14 +119,37 @@ def write_to_excel_a(dataframe,output_path):
     for index in range(len(dataframe)):
         dataframe.loc[index:index, ['营业员UID']] = str(dataframe.loc[index:index,['营业员UID']].values[0][0])
         dataframe.loc[index:index, ['商户UID']] =  str(dataframe.loc[index:index, ['商户UID']].values[0][0])
-        if index <3:
-            print(dataframe.loc[index:index,['营业员UID']].values[0][0])
-    # dataframe[['营业员UID']] = ['@%s' % d for d in dataframe[['营业员UID']]]
-    # dataframe[['商户UID']] = ['@%s' % d for d in dataframe[['商户UID']]]
+        # if index <3:
+        #     print(dataframe.loc[index:index,['营业员UID']].values[0][0])
     dataframe.to_excel(output_path,encoding='utf-8',index=False,sheet_name=r'匹配明细')
 
+
+def write_to_excel_d(dataframe,dict_path,output_path):
+    date = datetime.datetime.now().strftime('%Y%m%d')
+    with open(dict_path,encoding='utf-8') as f:
+        dic_data = f.readlines()
+        dic_data = [ele.split() for ele in dic_data]
+    dic = {item[1]:item[0] for item in dic_data}
+    dic_keys = list(dic.keys())
+    dic_values = list(dic.values())
+    dic_region = set(list(dic.values()))
+    for region in dic_region:
+        key_line = []
+        for i, p in enumerate(dic_values):
+            if p == region :
+                key_line.append(dic_keys[i])
+        df = dataframe[dataframe['区域编码'].isin(key_line)]
+        if len(df) == 0:
+            continue
+        file_name = output_path + os.sep + '{}_手淘拉新返点明细表_{}.xlsx'.format(date,region)
+        print(file_name)
+        write_to_excel_c(df,file_name)
+
+
+
+
 def write_to_excel_c(dataframe,output_path):
-    dataframe.to_excel(output_path,encoding='utf-8',index=True,sheet_name=r'佣金计算',merge_cells=False)
+    dataframe.to_excel(output_path,encoding='utf-8',index=False)
 
 def empty_dataframe(shape,columns):
     data = np.zeros(shape)
@@ -145,7 +168,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
                'updaterId', 'updateTime', 'delflag', 'payNo', 'payTime', 'payDetail']
     col_length = len(columns)
     df = empty_dataframe([pd_length,col_length],columns)
-    today_date = datetime.datetime.now().strftime('%Y%m%d')
+    # today_date = datetime.datetime.now().strftime('%Y%m%d')
 
     for i_index in range(pd_length):
         # insert_date = dataframe.iloc[i_index:i_index+1,0:1].values
@@ -156,7 +179,6 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         a = "${a}_{b}".format(a = insert_date2 ,b = dataframe['打款账户'][i_index])
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
-
 
         df['payAccount(营业员支付宝UID)'][i_index] = dataframe['打款UID'][i_index]
         df['money(发好多钱)'][i_index] = dataframe['佣金'][i_index]
@@ -176,9 +198,10 @@ def pivot_group_by(dataframe,output_path):
 if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
-    match_info = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input/match_info.xlsx'
     input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
     output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
+    match_info = input_file_path + os.sep + 'match_info.xlsx'
+    dict_path = input_file_path + os.sep + '区域划分.csv'
     output_a_test = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)
 
     file_name = search_new_input_file(input_file_path)
@@ -206,8 +229,9 @@ if __name__ == '__main__':
 
     pd_detail = account_name_way(pd_detail)
     write_to_excel_a(pd_detail,output_a_test)
+    write_to_excel_d(pd_detail, dict_path, output_file_path)
 
-    output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
-    pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
-    output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
-    pivot_group_by(pd_output,output_c_test)
+    # output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
+    # pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
+    # output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
+    # pivot_group_by(pd_output,output_c_test)
