@@ -146,8 +146,6 @@ def write_to_excel_d(dataframe,dict_path,output_path):
         write_to_excel_c(df,file_name)
 
 
-
-
 def write_to_excel_c(dataframe,output_path):
     dataframe.to_excel(output_path,encoding='utf-8',index=False)
 
@@ -188,6 +186,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
     df['status(固定值-1)'] = -1
     df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
     return df
+
 def pivot_group_by(dataframe,output_path):
     pd_output = dataframe.fillna('$')
     cols =  pd_output.columns.values.tolist()
@@ -231,7 +230,7 @@ if __name__ == '__main__':
     write_to_excel_a(pd_detail,output_a_test)
     write_to_excel_d(pd_detail, dict_path, output_file_path)
 
-    # output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
-    # pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
-    # output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
-    # pivot_group_by(pd_output,output_c_test)
+    output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
+    pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
+    output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
+    pivot_group_by(pd_output,output_c_test)
