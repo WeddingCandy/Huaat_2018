@@ -123,6 +123,11 @@ def write_to_excel_a(dataframe,output_path):
         #     print(dataframe.loc[index:index,['营业员UID']].values[0][0])
     dataframe.to_excel(output_path,encoding='utf-8',index=False,sheet_name=r'匹配明细')
 
+def write_to_excel_c(dataframe,output_path):
+    dataframe.to_excel(output_path,sheet_name='佣金计算',encoding='utf-8',index=True,merge_cells=False)
+
+def write_to_excel_e(dataframe,output_path):
+    dataframe.to_excel(output_path,encoding='utf-8',index=False)
 
 def write_to_excel_d(dataframe,dict_path,output_path):
     date = datetime.datetime.now().strftime('%Y%m%d')
@@ -143,11 +148,8 @@ def write_to_excel_d(dataframe,dict_path,output_path):
             continue
         file_name = output_path + os.sep + '{}_手淘拉新返点明细表_{}.xlsx'.format(date,region)
         print(file_name)
-        write_to_excel_c(df,file_name)
+        write_to_excel_e(df,file_name)
 
-
-def write_to_excel_c(dataframe,output_path):
-    dataframe.to_excel(output_path,encoding='utf-8',index=False)
 
 def empty_dataframe(shape,columns):
     data = np.zeros(shape)
