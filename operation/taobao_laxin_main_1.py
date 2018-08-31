@@ -95,22 +95,26 @@ def account_name_way(dataframe):
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['销售代表支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['销售代表打款支付宝账户认证人'][index])
-            dataframe['备注：结算方式'][index] = dataframe['合并销售代表名称'][index]
+            dataframe['备注：结算对象'][index] = dataframe['合并销售代表名称'][index]
+            dataframe['备注2：结算方式'][index] = '销售代表'
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
-            dataframe['备注：结算方式'][index] = dataframe['商户名称'][index]
+            dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
+            dataframe['备注2：结算方式'][index] = '商户'
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
-            dataframe['备注：结算方式'][index] = dataframe['商户名称'][index]
+            dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
+            dataframe['备注2：结算方式'][index] = '商户'
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
             dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['营业员支付宝账户认证人'][index])
-            dataframe['备注：结算方式'][index] = dataframe['营业员姓名'][index]
+            dataframe['备注：结算对象'][index] = dataframe['营业员姓名'][index]
+            dataframe['备注2：结算方式'][index] = '营业员'
             continue
     return dataframe
 
@@ -176,17 +180,18 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
 #         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
 #         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
-        a = "${a}_{b}".format(a = insert_date2 ,b = dataframe['打款账户'][i_index])
+        a = "${a}_{b}".format(a = insert_date2 ,b = str(dataframe['打款账户'][i_index]))
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
 
         df['payAccount(营业员支付宝UID)'][i_index] = dataframe['打款UID'][i_index]
         df['money(发好多钱)'][i_index] = dataframe['佣金'][i_index]
-        df['remark(支付描述-日期-营业员手机号)'][i_index] = '淘宝拉新奖励_{a}_{b}'.format(a = insert_date2,b = dataframe['备注：结算方式'][i_index])
+        df['remark(支付描述-日期-营业员手机号)'][i_index] = '淘宝拉新奖励_{a}_{b}'.format(a = insert_date2,b = dataframe['备注：结算对象'][i_index])
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
     df['status(固定值-1)'] = -1
-    df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
+    # 需要输出b表把下面一句注释取消掉
+    # df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
     return df
 
 def pivot_group_by(dataframe,output_path):
@@ -226,7 +231,8 @@ if __name__ == '__main__':
 
     pd_detail = create_new_line(pd_detail,'打款支付宝账户')
     pd_detail = create_new_line(pd_detail,'打款支付宝认证')
-    pd_detail = create_new_line(pd_detail,'备注：结算方式')
+    pd_detail = create_new_line(pd_detail,'备注：结算对象')
+    pd_detail = create_new_line(pd_detail, '备注2：结算方式')
 
     pd_detail = account_name_way(pd_detail)
     write_to_excel_a(pd_detail,output_a_test)
