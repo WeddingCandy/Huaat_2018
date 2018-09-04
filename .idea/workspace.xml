@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="153c1636-56a2-42e7-9e05-234fb3169e84" name="Default" comment="30th May in Mac Office v1">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/operation/taobao_laxin_main_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/operation/taobao_laxin_main_1.py" afterDir="false" />
-    </list>
+    <list default="true" id="153c1636-56a2-42e7-9e05-234fb3169e84" name="Default" comment="30th May in Mac Office v1" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +12,7 @@
     <session id="-2071537918">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="13" />
           <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.2" value="4" />
           <entry key="project.open.time.5" value="1" />
@@ -53,8 +50,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operation/taobao_laxin_main_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-410">
-              <caret line="192" column="22" selection-start-line="192" selection-start-column="22" selection-end-line="192" selection-end-column="22" />
+            <state relative-caret-position="534">
+              <caret line="244" lean-forward="true" selection-start-line="244" selection-end-line="244" />
               <folding>
                 <marker date="1535698319537" expanded="true" signature="7466:7468" ph="..." />
               </folding>
@@ -511,7 +508,7 @@
       <window_info id="Python Console" order="3" weight="0.4217633" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4988086" visible="true" weight="0.24817519" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4988086" weight="0.24817519" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39854014" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -901,8 +898,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/operation/taobao_laxin_main_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-410">
-          <caret line="192" column="22" selection-start-line="192" selection-start-column="22" selection-end-line="192" selection-end-column="22" />
+        <state relative-caret-position="534">
+          <caret line="244" lean-forward="true" selection-start-line="244" selection-end-line="244" />
           <folding>
             <marker date="1535698319537" expanded="true" signature="7466:7468" ph="..." />
           </folding>
