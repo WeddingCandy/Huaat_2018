@@ -25,7 +25,7 @@ def search_new_input_file(file_path):
     for root, dirs, files in os.walk(file_path):
         all_files = files
     print(all_files,date)
-    pattern1 = '[\w-]+{}\.xlsx'.format(date)
+    pattern1 = '[\u4e00-\u9fa5\w-\s]+{}\.xlsx'.format(date)
     # print(pattern1)
     reg_exp = re.compile(pattern1)
     for file in all_files:

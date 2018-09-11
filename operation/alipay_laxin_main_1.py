@@ -142,13 +142,13 @@ def search_new_input_file(file_path):
     import os
     import re
     import datetime
-    date = (datetime.date.today() + datetime.timedelta(days = -1)).strftime('%m%d') #+ datetime.timedelta(days = -1)
+    date = (datetime.date.today() ).strftime('%m%d') #+ datetime.timedelta(days = -1)
 
     all_files = []
     aim_file =''
     for root, dirs, files in os.walk(file_path):
         all_files = files
-    pattern1 = '[\u4e00-\u9fa5\w-]+{}\.xlsx'.format(date)
+    pattern1 = '[\u4e00-\u9fa5\w-\s]+{}\.xlsx'.format(date)
     reg_exp = re.compile(pattern1)
     for file in all_files:
         if len(reg_exp.findall(file))>0 :
