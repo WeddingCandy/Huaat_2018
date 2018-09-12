@@ -85,7 +85,8 @@ def output_uid(dataframe,indexx):
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
             continue
-        elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
+        elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan)
+              & (dataframe['打款账户'][index]  is not np.nan ) )== True :
             dataframe['打款UID'][index] = str(dataframe['营业员UID'][index])
             continue
     return dataframe
@@ -203,10 +204,10 @@ def pivot_group_by(dataframe,output_path):
 if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
-    input_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\input' # BY ylj
-    output_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\output' # BY ylj
-    # input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
-    # output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
+    # input_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\input' # BY ylj
+    # output_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\output' # BY ylj
+    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
+    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
     match_info = input_file_path + os.sep + 'match_info.xlsx'
     dict_path = input_file_path + os.sep + '区域划分.csv'
     output_a_test = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)
