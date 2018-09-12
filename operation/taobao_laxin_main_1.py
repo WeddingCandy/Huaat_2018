@@ -24,9 +24,8 @@ def search_new_input_file(file_path):
     aim_file =''
     for root, dirs, files in os.walk(file_path):
         all_files = files
-    print(all_files,date)
-    pattern1 = '[\u4e00-\u9fa5\w-\s]+{}\.xlsx'.format(date)
-    # print(pattern1)
+    # print(all_files,date)
+    pattern1 = '[\u4e00-\u9fa5\w\s-]+{}\.xlsx'.format(date)
     reg_exp = re.compile(pattern1)
     for file in all_files:
         if len(reg_exp.findall(file))>0 :
@@ -75,6 +74,7 @@ def output_uid(dataframe,indexx):
             dataframe['打款账户'][content] = dataframe['销售代表编码'][content]
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is  np.nan) == True:
             dataframe['打款账户'][content] = dataframe['营业员电话'][content]
+
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
@@ -164,12 +164,11 @@ def empty_dataframe(shape,columns):
 
 def write_to_excel_b(dataframe,output_path,pd_length):
 
-    columns = ['id', 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
+    columns = [ 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
                'areaCode',
-               'moneyType(固定值1)', 'payAccount(营业员支付宝UID)', 'payAccountName', 'money(发好多钱)', 'status(固定值-1)',
+               'moneyType(固定值1)', 'payAccount(营业员支付宝UID)', 'payAccountName', 'money(发好多钱)', 'status(固定值0)',
                'couponNO1',
-               'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)', 'createrId', 'createTime',
-               'updaterId', 'updateTime', 'delflag', 'payNo', 'payTime', 'payDetail']
+               'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)', 'delflag', 'payNo', 'payTime', 'payDetail']
     col_length = len(columns)
     df = empty_dataframe([pd_length,col_length],columns)
     # today_date = datetime.datetime.now().strftime('%Y%m%d')
@@ -180,7 +179,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
 #         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
 #         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
-        a = "${a}_{b}".format(a = insert_date2 ,b = str(dataframe['打款账户'][i_index]))
+        a = "T{a}_{b}".format(a = insert_date2 ,b = str(dataframe['打款账户'][i_index]))
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
 
@@ -189,7 +188,7 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         df['remark(支付描述-日期-营业员手机号)'][i_index] = '淘宝拉新奖励_{a}_{b}'.format(a = insert_date2,b = dataframe['备注：结算对象'][i_index])
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
-    df['status(固定值-1)'] = -1
+    df['status(固定值0)'] = 0
     # 需要输出b表把下面一句注释取消掉
     # df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
     return df
@@ -204,8 +203,10 @@ def pivot_group_by(dataframe,output_path):
 if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
-    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
-    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
+    input_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\input' # BY ylj
+    output_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\output' # BY ylj
+    # input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
+    # output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
     match_info = input_file_path + os.sep + 'match_info.xlsx'
     dict_path = input_file_path + os.sep + '区域划分.csv'
     output_a_test = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)
@@ -235,6 +236,10 @@ if __name__ == '__main__':
     pd_detail = create_new_line(pd_detail, '备注2：结算方式')
 
     pd_detail = account_name_way(pd_detail)
+    pd_detail = create_new_line(pd_detail, '结算日期')
+    pd_detail['结算日期'] = date
+    # pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)')
+
     write_to_excel_a(pd_detail,output_a_test)
     write_to_excel_d(pd_detail, dict_path, output_file_path)
 

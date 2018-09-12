@@ -16,25 +16,26 @@
     <session id="-2071537918">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.2" value="4" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="2" />
-          <entry key="project.open.time.7" value="3" />
+          <entry key="project.open.time.7" value="4" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="831" />
-          <entry key="py" value="3463" />
+          <entry key="py" value="3663" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4294" />
+          <entry key="Python" value="4494" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -51,23 +52,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/operation/taobao_laxin_main_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+            <state relative-caret-position="-320">
+              <caret line="207" selection-start-line="207" selection-end-line="208" selection-end-column="84" />
               <folding>
-                <marker date="1536630339497" expanded="true" signature="7481:7483" ph="..." />
+                <element signature="e#24#43#0" expanded="true" />
+                <marker date="1536742822456" expanded="true" signature="7462:7464" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="30" />
+            <state relative-caret-position="766">
+              <caret line="132" column="20" selection-start-line="132" selection-start-column="20" selection-end-line="132" selection-end-column="20" />
+              <folding>
+                <element signature="e#24#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,6 +100,8 @@
       <find>'打款UID'</find>
       <find>columns</find>
       <find>value</find>
+      <find>search_new_input_file</find>
+      <find>*</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -133,7 +140,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="777" />
@@ -144,6 +151,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -160,7 +168,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -503,7 +510,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="777" extended-state="0" />
+    <frame x="1" y="23" width="1280" height="777" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15726767" />
@@ -512,12 +519,12 @@
       <window_info id="Python Console" order="3" weight="0.4217633" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4988086" weight="0.24817519" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4980143" visible="true" weight="0.3270073" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39854014" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32988167" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50119144" side_tool="true" weight="0.27218935" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5019857" side_tool="true" weight="0.24817519" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4988086" weight="0.32988167" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.329927" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -893,20 +900,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/operation/taobao_laxin_main_1.py">
+    <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+        <state relative-caret-position="766">
+          <caret line="132" column="20" selection-start-line="132" selection-start-column="20" selection-end-line="132" selection-end-column="20" />
           <folding>
-            <marker date="1536630339497" expanded="true" signature="7481:7483" ph="..." />
+            <element signature="e#24#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/operation/alipay_laxin_main_1.py">
+    <entry file="file://$PROJECT_DIR$/operation/taobao_laxin_main_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="30" />
+        <state relative-caret-position="-320">
+          <caret line="207" selection-start-line="207" selection-end-line="208" selection-end-column="84" />
+          <folding>
+            <element signature="e#24#43#0" expanded="true" />
+            <marker date="1536742822456" expanded="true" signature="7462:7464" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

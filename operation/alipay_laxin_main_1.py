@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@CREATETIME: 2018/8/2 16:50 
-@AUTHOR: Chans
-@VERSION: 2.0
-"""
 import pandas as pd
 import numpy as np
 import datetime
@@ -19,13 +14,39 @@ def read_detail(file):
     pd_detail = pd.read_excel(file,encoding = 'utf-8',header=0)
     return  pd_detail
 
+def search_new_input_file(file_path):
+    import os
+    import re
+    import datetime
+    date = (datetime.date.today() ).strftime('%m%d') #+ datetime.timedelta(days = -1)
+
+    all_files = []
+    aim_file =''
+    for root, dirs, files in os.walk(file_path):
+        all_files = files
+    pattern1 = '[\u4e00-\u9fa5\w\s-]+{}\.xlsx'.format(date)
+    reg_exp = re.compile(pattern1)
+    for file in all_files:
+        if len(reg_exp.findall(file))>0 :
+            aim_file =reg_exp.findall(file)[0]
+    print(aim_file)
+    return aim_file
+
+
 def connection_with_match_info(dataframe,dataframe_info):
     dataframe_info.drop_duplicates(dataframe_info.columns.tolist(),keep='first',inplace=True)
-    pd_detail = dataframe.merge(dataframe_info[['销售代表编码', 'UID']], how='left', left_on='businessid', right_on='销售代表编码')
+    # 新增"支付宝账号认证人"&"营业员绑定支付宝"，输出时要删除
+    pd_detail = dataframe.merge(dataframe_info[['销售代表编码', '支付宝账号认证人', '营业员绑定支付宝' , 'UID']],
+                                how='left', left_on='businessid', right_on='销售代表编码')
     pd_detail.rename(columns={ 'UID': '商户对应UID'}, inplace=True)
+    pd_detail.rename(columns={ '支付宝账号认证人': '商户支付宝账号认证人'}, inplace=True)
+    pd_detail.rename(columns={'营业员绑定支付宝': '商户支付宝'}, inplace=True)
     pd_detail = pd_detail.drop(['销售代表编码'], axis=1)
-    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', 'UID']], how='left', left_on='agentid', right_on='销售代表编码')
+    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码' , '支付宝账号认证人', '营业员绑定支付宝', 'UID']],
+                                how='left', left_on='agentid', right_on='销售代表编码')
     pd_detail.rename(columns={'UID': '销售代表对应UID'}, inplace=True)
+    pd_detail.rename(columns={ '支付宝账号认证人': '销售代表支付宝账号认证人'}, inplace=True)
+    pd_detail.rename(columns={ '营业员绑定支付宝': '销售代表支付宝'}, inplace=True)
     pd_detail = pd_detail.drop(['销售代表编码'], axis=1)
     return pd_detail
 
@@ -49,31 +70,69 @@ def output_uid(dataframe,indexx):
     for content in range(indexx):
         if (dataframe['商户对应UID'][content] is not np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan ) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['businessid'][content]
+            dataframe['支付宝账户'][content] = dataframe['商户支付宝'][content]
+            dataframe['支付宝账户认证人'][content] = dataframe['商户支付宝账号认证人'][content]
         elif (dataframe['商户对应UID'][content] is not np.nan ) & (dataframe['销售代表对应UID'][content] is np.nan ) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['businessid'][content]
+            dataframe['支付宝账户'][content] = dataframe['商户支付宝'][content]
+            dataframe['支付宝账户认证人'][content] = dataframe['商户支付宝账号认证人'][content]
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['agentid'][content]
+            dataframe['支付宝账户'][content] = dataframe['销售代表支付宝'][content]
+            dataframe['支付宝账户认证人'][content] = dataframe['销售代表支付宝账号认证人'][content]
         elif (dataframe['商户对应UID'][content] is np.nan ) & (dataframe['销售代表对应UID'][content] is  np.nan) == True:
             dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][content] = dataframe['assistanttel'][content]
+            dataframe['支付宝账户'][content] = dataframe['销售代表支付宝'][content]
+            dataframe['支付宝账户认证人'][content] = ''
 
     for index in dataframe.index :
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['销售代表对应UID'][index])
-            dataframe['备注：结算方式'][index] = dataframe['agentname'][index]
+            dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][index] = dataframe['agentname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
-            dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
+            dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][index] = dataframe['businessname'][index]
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款UID'][index] = str(dataframe['商户对应UID'][index])
-            dataframe['备注：结算方式'][index] = dataframe['businessname'][index]
+            dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][index] = dataframe['businessname'][index]
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]  is not np.nan ) )== True :
             dataframe['打款UID'][index] = str(dataframe['aliacccountid'][index])
-            dataframe['备注：结算方式'][index] = dataframe['ass_name'][index]
+            dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][index] = dataframe['ass_name'][index]
             continue
     return dataframe
+
+def account_name_way(dataframe):
+    for index in dataframe.index :
+        if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
+            dataframe['打款支付宝账户'][index] = str(dataframe['销售代表支付宝账户'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['销售代表打款支付宝账户认证人'][index])
+            dataframe['备注：结算对象'][index] = dataframe['合并销售代表名称'][index]
+            dataframe['备注2：结算方式'][index] = '销售代表'
+            continue
+        elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
+            dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
+            dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
+            dataframe['备注2：结算方式'][index] = '商户'
+            continue
+        elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
+            dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
+            dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
+            dataframe['备注2：结算方式'][index] = '商户'
+            continue
+        elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
+            dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账户'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['营业员支付宝账户认证人'][index])
+            dataframe['备注：结算对象'][index] = dataframe['营业员姓名'][index]
+            dataframe['备注2：结算方式'][index] = '营业员'
+            continue
+    return dataframe
+
+
 
 def write_to_excel_a(dataframe,output_path):
     dataframe.to_excel(output_path,encoding='utf-8',index=False,sheet_name=r'匹配明细')
@@ -92,12 +151,12 @@ def empty_dataframe(shape,columns):
 
 def write_to_excel_b(dataframe,output_path,pd_length):
 
-    columns = ['id', 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
+    columns = [ 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
                'areaCode',
-               'moneyType(固定值1)', 'payAccount(营业员支付宝UID)', 'payAccountName', 'money(发好多钱)', 'status(固定值-1)',
+               'moneyType(固定值1)', 'payAccount(营业员支付宝UID)', 'payAccountName', 'money(发好多钱)', 'status(固定值0)',
                'couponNO1',
-               'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)', 'createrId', 'createTime',
-               'updaterId', 'updateTime', 'delflag', 'payNo', 'payTime', 'payDetail']
+               'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)' ,
+                'delflag', 'payNo', 'payTime', 'payDetail']
     col_length = len(columns)
     df = empty_dataframe([pd_length,col_length],columns)
     today_date = datetime.datetime.now().strftime('%Y%m%d')
@@ -108,18 +167,18 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
-        a = "${a}_{b}".format(a = insert_date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
+        a = "A{a}_{b}".format(a = insert_date ,b = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
             # patten.sub('_',a)
 
         df['payAccount(营业员支付宝UID)'][i_index] = dataframe['打款UID'][i_index]
         df['money(发好多钱)'][i_index] = dataframe['money'][i_index]
-        df['remark(支付描述-日期-营业员手机号)'][i_index] = '支付宝拉新奖励_{a}_{b}'.format(a = insert_date,b = dataframe['备注：结算方式'][i_index])
+        df['remark(支付描述-日期-营业员手机号)'][i_index] = '支付宝拉新奖励_{a}_{b}'.format(a = insert_date,b = dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][i_index])
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
-    df['status(固定值-1)'] = -1
-    df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
+    df['status(固定值0)'] = 0
+    # df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
     return df
 
 def pivot_group_by(dataframe,output_path):
@@ -138,23 +197,7 @@ def os_walk(path):
     return file_list
 
 
-def search_new_input_file(file_path):
-    import os
-    import re
-    import datetime
-    date = (datetime.date.today() ).strftime('%m%d') #+ datetime.timedelta(days = -1)
 
-    all_files = []
-    aim_file =''
-    for root, dirs, files in os.walk(file_path):
-        all_files = files
-    pattern1 = '[\u4e00-\u9fa5\w-\s]+{}\.xlsx'.format(date)
-    reg_exp = re.compile(pattern1)
-    for file in all_files:
-        if len(reg_exp.findall(file))>0 :
-            aim_file =reg_exp.findall(file)[0]
-    print(aim_file)
-    return aim_file
 
 if __name__ == '__main__':
     # -----paths-----
@@ -189,8 +232,17 @@ if __name__ == '__main__':
     # index3 = get_position_index(pd_detail,[-1,])
     index3 = len(pd_detail)
     pd_detail = create_new_line(pd_detail,'打款UID')
-    pd_detail = create_new_line(pd_detail, '备注：结算方式')
+    pd_detail = create_new_line(pd_detail, '打款账户(营业员手机号/商户编码/销售代表编码)')
+    pd_detail = create_new_line(pd_detail, '结算对象(营业员姓名/商户名称/销售代表名称)')
     pd_detail = output_uid(pd_detail,index3)
+
+    pd_detail = create_new_line(pd_detail, '支付宝账户') #新增
+    pd_detail = create_new_line(pd_detail, '支付宝账户认证人') #新增
+    pd_detail = create_new_line(pd_detail, '结算方式') #新增
+    pd_detail = create_new_line(pd_detail, '结算日期') #新增
+    pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)') #新增
+
+
     pd_detail[['date']] = pd_detail[['date']].astype('object')
 
     insert_date2 = str(pd_detail.iloc[0:0 + 1, 0:1].values[0][0])
