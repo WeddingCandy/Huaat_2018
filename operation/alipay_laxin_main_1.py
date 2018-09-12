@@ -115,7 +115,6 @@ def account_name_way(dataframe):
         insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
         insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
         get_contents = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]
-        x  = type(get_contents)
         if type(get_contents) == type(1.00) :
             get_contents = int(get_contents)
         insert_into_orderID = "A{a}_{b}".format(a=insert_date,
@@ -179,7 +178,10 @@ def write_to_excel_b(dataframe, output_path, pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
         insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
         insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
-        a = "A{a}_{b}".format(a=insert_date, b=dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index])
+        get_contents = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index]
+        if type(get_contents) == type(1.00) :
+            get_contents = int(get_contents)
+        a = "A{a}_{b}".format(a=insert_date, b = get_contents)
 
         df['orderID(结算日期加营业员手机号)'][i_index] = a
 

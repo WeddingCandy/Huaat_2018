@@ -180,7 +180,9 @@ def write_to_excel_b(dataframe,output_path,pd_length):
         # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
 #         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
 #         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
-        a = "T{a}_{b}".format(a = insert_date2 ,b = str(dataframe['打款账户'][i_index]))
+
+        get_contents = dataframe['打款账户'][i_index]
+        a = "T{a}_{b}".format(a = insert_date2 ,b = get_contents)
 
         df['orderID(结算日期加营业员手机号)'][i_index] =  a
 
