@@ -4,9 +4,8 @@ import numpy as np
 import datetime
 import os
 
-def read_match_info(file):
+def read_match_info(file , columns_match_info):
     pd_match_info = pd.read_excel(file,encoding = 'utf-8',header=0)
-    columns_match_info = ['销售代表编码', '销售代表名称', '营业员手机号', '支付宝账号认证人', '营业员绑定支付宝', 'UID']
     pd_match_info_aim = pd_match_info[columns_match_info]
     return pd_match_info_aim
 
@@ -217,7 +216,8 @@ if __name__ == '__main__':
     file_name = search_new_input_file(input_file_path)
     detail = input_file_path + os.sep + '{}'.format(file_name)
 
-    pd_match_info_aim = read_match_info(match_info)
+    pd_match_info_aim = read_match_info(match_info ,
+                                        ['销售代表编码', '销售代表名称', '支付宝账号认证人', '营业员绑定支付宝', 'UID'])
     pd_detail = read_detail(detail)
     pd_detail = connection_with_match_info(pd_detail,pd_match_info_aim)
 

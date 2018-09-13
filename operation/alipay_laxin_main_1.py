@@ -5,9 +5,8 @@ import datetime
 import os
 
 
-def read_match_info(file):
+def read_match_info(file ,columns_match_info):
     pd_match_info = pd.read_excel(file, encoding='utf-8', header=0)
-    columns_match_info = ['销售代表编码', '销售代表名称', '营业员手机号', '支付宝账号认证人', '营业员绑定支付宝', 'UID']
     pd_match_info_aim = pd_match_info[columns_match_info]
     return pd_match_info_aim
 
@@ -217,8 +216,8 @@ if __name__ == '__main__':
     # -----paths-----
     date = datetime.datetime.now().strftime('%Y%m%d')
 
-    # input_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\input' # BY ylj
-    # output_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\output' # BY ylj
+    # input_file_path = r'C:\Users\10854\Desktop\laxin\alipay\input' # BY ylj
+    # output_file_path = r'C:\Users\10854\Desktop\laxin\alipay\output' # BY ylj
     input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/input'
     output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/alipay/out'
     match_info = input_file_path + os.sep + 'match_info.xlsx'
@@ -228,7 +227,8 @@ if __name__ == '__main__':
     output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
 
     # -----main-----
-    pd_match_info_aim = read_match_info(match_info)
+    pd_match_info_aim = read_match_info(match_info ,
+                                        ['销售代表编码', '销售代表名称', '支付宝账号认证人', '营业员绑定支付宝', 'UID'])
     pd_detail = read_detail(detail)
     # print(len(pd_detail),pd_detail.info())
     pd_detail = connection_with_match_info(pd_detail, pd_match_info_aim)
