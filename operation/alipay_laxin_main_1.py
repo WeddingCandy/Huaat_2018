@@ -137,7 +137,7 @@ def account_name_way(dataframe):
             continue
         elif ((dataframe['销售代表对应UID'][index] is np.nan) & (dataframe['商户对应UID'][index] is np.nan) &
               (dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index] is not np.nan)) == True:
-            dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账户'][index])
+            dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账号'][index])
             dataframe['支付宝账户认证人'][index] = ''
             dataframe['结算方式'][index] = '营业员'
             continue

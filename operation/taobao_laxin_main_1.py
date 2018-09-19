@@ -34,15 +34,20 @@ def search_new_input_file(file_path):
 
 def connection_with_match_info(dataframe,dataframe_info):
     dataframe_info.drop_duplicates(dataframe_info.columns.tolist(),keep='first',inplace=True)
-    pd_detail = dataframe.merge(dataframe_info[['销售代表编码', 'UID']], how='left', left_on='商户编码', right_on='销售代表编码')
-    pd_detail.rename(columns={ 'UID': '商户对应UID','销售代表编码_x':'销售代表编码'}, inplace=True)
-    print(pd_detail.head())
+    pd_detail = dataframe.merge(dataframe_info[['销售代表编码', '支付宝账号认证人', '营业员绑定支付宝', 'UID']],
+                                how='left', left_on='商户编码', right_on='销售代表编码')
+    pd_detail.rename(columns={'UID': '商户对应UID', '销售代表编码_x': '销售代表编码', '支付宝账号认证人': 'user_info商户支付宝账号认证人',
+                              '营业员绑定支付宝': 'user_info商户支付宝'}, inplace=True)
     pd_detail = pd_detail.drop(['销售代表编码_y'], axis=1)
-    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', 'UID','销售代表名称','营业员绑定支付宝']], how='left', left_on='销售代表编码', right_on='销售代表编码')
+
+    print(pd_detail.head())
+
+    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码','销售代表名称','营业员绑定支付宝','UID']],
+                                how='left', left_on='销售代表编码', right_on='销售代表编码')
     print(pd_detail.head())
     pd_detail.rename(columns={'UID': '销售代表对应UID','销售代表编码_x':'销售代表编码',
-                              '销售代表名称_x':'销售代表名称','销售代表名称_y':'销售代表打款支付宝账户认证人',
-                             '营业员绑定支付宝':'销售代表打款支付宝账户'}, inplace=True)
+                              '销售代表名称_x':'销售代表名称','销售代表名称_y':'user_info销售代表打款支付宝账户认证人',
+                             '营业员绑定支付宝':'user_info销售代表打款支付宝账户'}, inplace=True)
     return pd_detail
 
 def get_vacant_index(dataframe,line_name):
@@ -92,29 +97,55 @@ def output_uid(dataframe,indexx):
 
 def account_name_way(dataframe):
     for index in dataframe.index :
+        insert_date2 = str( dataframe['日期'][index])
+        insert_date = datetime.datetime.strptime(insert_date2, '%Y%m%d')
+
+
+        today_date = datetime.datetime.today()
+        # print(type(insert_date) , type(today_date))
+        day_gap = (today_date - insert_date).days
+        batch_label = ''
+        if day_gap >= 7 :
+            batch_label = 'v2'
+        elif day_gap <= 3 :
+            batch_label = 'v1'
+
+        get_contents = dataframe['打款账户'][index]
+        if type(get_contents) == type(1.00) :
+            get_contents = int(get_contents)
+
+        insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
+        insert_into_orderID = "A{a}_{b}".format(a=insert_date,
+                                                b = get_contents )
+        dataframe['orderID(结算日期加营业员手机号)'][index] = insert_into_orderID
+
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
-            dataframe['打款支付宝账户'][index] = str(dataframe['销售代表支付宝账户'][index])
-            dataframe['打款支付宝认证'][index] = str(dataframe['销售代表打款支付宝账户认证人'][index])
+            dataframe['打款支付宝账户'][index] = str(dataframe['user_info销售代表打款支付宝账户'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['user_info销售代表打款支付宝账户认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['合并销售代表名称'][index]
             dataframe['备注2：结算方式'][index] = '销售代表'
+            dataframe['备注3：结佣批次'][index] = batch_label
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
-            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
+            dataframe['打款支付宝账户'][index] = str(dataframe['user_info商户支付宝'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['user_info商户支付宝账号认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
             dataframe['备注2：结算方式'][index] = '商户'
+            dataframe['备注3：结佣批次'][index] = batch_label
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
-            dataframe['打款支付宝账户'][index] = str(dataframe['商户支付宝账户'][index])
-            dataframe['打款支付宝认证'][index] = str(dataframe['商户支付宝账户认证人'][index])
+            dataframe['打款支付宝账户'][index] = str(dataframe['user_info商户支付宝'][index])
+            dataframe['打款支付宝认证'][index] = str(dataframe['user_info商户支付宝账号认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
             dataframe['备注2：结算方式'][index] = '商户'
+            dataframe['备注3：结佣批次'][index] = batch_label
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
             dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['营业员支付宝账户认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['营业员姓名'][index]
             dataframe['备注2：结算方式'][index] = '营业员'
+            dataframe['备注3：结佣批次'][index] = batch_label
             continue
     return dataframe
 
@@ -237,11 +268,19 @@ if __name__ == '__main__':
     pd_detail = create_new_line(pd_detail,'打款支付宝认证')
     pd_detail = create_new_line(pd_detail,'备注：结算对象')
     pd_detail = create_new_line(pd_detail, '备注2：结算方式')
+    pd_detail = create_new_line(pd_detail, '备注3：结佣批次')
+    pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)')  # 新增
 
     pd_detail = account_name_way(pd_detail)
     pd_detail = create_new_line(pd_detail, '结算日期')
     pd_detail['结算日期'] = date
-    # pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)')
+
+
+    # 在此处输入DROP列的列名
+    pd_detail = pd_detail.drop(['user_info商户支付宝账号认证人','user_info商户支付宝','user_info销售代表打款支付宝账户认证人',
+                                'user_info销售代表打款支付宝账户'], axis=1)
+    # pd_detail = pd_detail.drop(['',''], axis=1)
+
 
     write_to_excel_a(pd_detail,output_a_test)
     write_to_excel_d(pd_detail, dict_path, output_file_path)
