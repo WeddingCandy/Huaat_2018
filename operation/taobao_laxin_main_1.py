@@ -36,18 +36,22 @@ def connection_with_match_info(dataframe,dataframe_info):
     dataframe_info.drop_duplicates(dataframe_info.columns.tolist(),keep='first',inplace=True)
     pd_detail = dataframe.merge(dataframe_info[['销售代表编码', '支付宝账号认证人', '营业员绑定支付宝', 'UID']],
                                 how='left', left_on='商户编码', right_on='销售代表编码')
-    pd_detail.rename(columns={'UID': '商户对应UID', '销售代表编码_x': '销售代表编码', '支付宝账号认证人': 'user_info商户支付宝账号认证人',
-                              '营业员绑定支付宝': 'user_info商户支付宝'}, inplace=True)
-    pd_detail = pd_detail.drop(['销售代表编码_y'], axis=1)
 
-    print(pd_detail.head())
 
-    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码','销售代表名称','营业员绑定支付宝','UID']],
+    pd_detail.rename(columns={'销售代表编码_x': '销售代表编码','UID': '商户对应UID', '支付宝账号认证人': 'user_info商户支付宝账号认证人',
+                              '营业员绑定支付宝': 'user_info商户支付宝' ,'销售代表编码_y':'user_info商户编码'}, inplace=True)   #
+    pd_detail = pd_detail.drop(['user_info商户编码'], axis=1)
+
+    # print(pd_detail.head())
+
+    pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', '支付宝账号认证人','营业员绑定支付宝','UID']],
                                 how='left', left_on='销售代表编码', right_on='销售代表编码')
-    print(pd_detail.head())
-    pd_detail.rename(columns={'UID': '销售代表对应UID','销售代表编码_x':'销售代表编码',
-                              '销售代表名称_x':'销售代表名称','销售代表名称_y':'user_info销售代表打款支付宝账户认证人',
-                             '营业员绑定支付宝':'user_info销售代表打款支付宝账户'}, inplace=True)
+
+    pd_detail.rename(columns={'UID': '销售代表对应UID',
+                              '支付宝账号认证人': 'user_info销售代表打款支付宝账户认证人',
+                                '营业员绑定支付宝':'user_info销售代表打款支付宝账户'}, inplace=True)
+
+    print(pd_detail.columns)
     return pd_detail
 
 def get_vacant_index(dataframe,line_name):

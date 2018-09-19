@@ -147,9 +147,6 @@ def account_name_way(dataframe):
 
 
 def write_to_excel_a(dataframe, output_path):
-    
-    insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
-
     dataframe.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'匹配明细')
 
 
@@ -255,17 +252,17 @@ if __name__ == '__main__':
     pd_detail['结算日期'] = date
 
 
-    insert_date2 = str(pd_detail.loc[0:0,'日期'].values[0][0])
+    insert_date2 = str(pd_detail.loc[0:0,'日期'].values[0])
     insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
     laxin_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
     # laxin_date = pd_detail.loc[0:1,'日期']
 
     output_a_test = output_file_path + os.sep + '支付宝拉新佣金发放_{}.xlsx'.format(laxin_date)
-
+    write_to_excel_a(pd_detail, output_a_test)
 
     # print(pd_detail.head())
 
     pd_output = write_to_excel_b(pd_detail, output_b_test, pd_length=len(pd_detail))
-    write_to_excel_a(pd_detail, output_a_test)
+
     output_c_test = output_file_path + os.sep + '打款明细_{}.xlsx'.format(laxin_date)
     pivot_group_by(pd_output, output_c_test)
