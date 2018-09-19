@@ -99,24 +99,24 @@ def account_name_way(dataframe):
     for index in dataframe.index :
         insert_date2 = str( dataframe['日期'][index])
         insert_date = datetime.datetime.strptime(insert_date2, '%Y%m%d')
-
-
         today_date = datetime.datetime.today()
-        # print(type(insert_date) , type(today_date))
         day_gap = (today_date - insert_date).days
+
         batch_label = ''
+        batch_label_chinese = ''
         if day_gap >= 7 :
             batch_label = 'v2'
+            batch_label_chinese = '二次结佣'
         elif day_gap <= 3 :
             batch_label = 'v1'
+            batch_label_chinese = '一次结佣'
 
         get_contents = dataframe['打款账户'][index]
         if type(get_contents) == type(1.00) :
             get_contents = int(get_contents)
 
         insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
-        insert_into_orderID = "A{a}_{b}".format(a=insert_date,
-                                                b = get_contents )
+        insert_into_orderID = "A{a}_{b}{c}".format(a = insert_date, b = get_contents ,c = batch_label)
         dataframe['orderID(结算日期加营业员手机号)'][index] = insert_into_orderID
 
         if (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is  np.nan) == True:
@@ -124,28 +124,28 @@ def account_name_way(dataframe):
             dataframe['打款支付宝认证'][index] = str(dataframe['user_info销售代表打款支付宝账户认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['合并销售代表名称'][index]
             dataframe['备注2：结算方式'][index] = '销售代表'
-            dataframe['备注3：结佣批次'][index] = batch_label
+            dataframe['备注3：结佣批次'][index] = batch_label_chinese
             continue
         elif (dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['user_info商户支付宝'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['user_info商户支付宝账号认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
             dataframe['备注2：结算方式'][index] = '商户'
-            dataframe['备注3：结佣批次'][index] = batch_label
+            dataframe['备注3：结佣批次'][index] = batch_label_chinese
             continue
         elif (dataframe['销售代表对应UID'][index]  is not np.nan) & (dataframe['商户对应UID'][index]  is not np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['user_info商户支付宝'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['user_info商户支付宝账号认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['商户名称'][index]
             dataframe['备注2：结算方式'][index] = '商户'
-            dataframe['备注3：结佣批次'][index] = batch_label
+            dataframe['备注3：结佣批次'][index] = batch_label_chinese
             continue
         elif ((dataframe['销售代表对应UID'][index]  is  np.nan) & (dataframe['商户对应UID'][index]  is np.nan) & (dataframe['打款账户'][index]  is not np.nan ) )== True :
             dataframe['打款支付宝账户'][index] = str(dataframe['营业员支付宝账户'][index])
             dataframe['打款支付宝认证'][index] = str(dataframe['营业员支付宝账户认证人'][index])
             dataframe['备注：结算对象'][index] = dataframe['营业员姓名'][index]
             dataframe['备注2：结算方式'][index] = '营业员'
-            dataframe['备注3：结佣批次'][index] = batch_label
+            dataframe['备注3：结佣批次'][index] = batch_label_chinese
             continue
     return dataframe
 
@@ -206,19 +206,30 @@ def write_to_excel_b(dataframe,output_path,pd_length):
 
     for i_index in range(pd_length):
         # insert_date = dataframe.iloc[i_index:i_index+1,0:1].values
-        insert_date2 = str(dataframe.loc[i_index:i_index , ['日期']].values[0][0])
-        # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
-#         insert_date = datetime.datetime.strptime(insert_date2,'%Y-%m-%d %H:%M:%S')
-#         insert_date = datetime.datetime.strftime(insert_date,'%Y%m%d')
+        insert_date2 = str(dataframe['日期'][i_index])
+        insert_date = datetime.datetime.strptime(insert_date2, '%Y%m%d')
+        today_date = datetime.datetime.today()
+        day_gap = (today_date - insert_date).days
+
+        batch_label = ''
+        batch_label_chinese = ''
+        if day_gap >= 7:
+            batch_label = 'v2'
+            batch_label_chinese = '(二次结佣)'
+        elif day_gap <= 3:
+            batch_label = 'v1'
+            batch_label_chinese = '(一次结佣)'
+
 
         get_contents = dataframe['打款账户'][i_index]
-        a = "T{a}_{b}".format(a = insert_date2 ,b = get_contents)
-
-        df['orderID(结算日期加营业员手机号)'][i_index] =  a
+        insert_contents = "T{a}_{b}{c}".format(a = insert_date2 ,b = get_contents , c = batch_label)
+        insert_contents_remark = '淘宝拉新奖励_{a}_{b}{c}'.format(a = insert_date2, b = dataframe['备注：结算对象'][i_index],
+                                                             c = batch_label_chinese)
+        df['orderID(结算日期加营业员手机号)'][i_index] =  insert_contents
 
         df['payAccount(营业员支付宝UID)'][i_index] = dataframe['打款UID'][i_index]
         df['money(发好多钱)'][i_index] = dataframe['佣金'][i_index]
-        df['remark(支付描述-日期-营业员手机号)'][i_index] = '淘宝拉新奖励_{a}_{b}'.format(a = insert_date2,b = dataframe['备注：结算对象'][i_index])
+        df['remark(支付描述-日期-营业员手机号)'][i_index] = insert_contents_remark
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
     df['status(固定值0)'] = 0

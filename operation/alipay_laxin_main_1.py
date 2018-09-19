@@ -31,7 +31,7 @@ def search_new_input_file(file_path):
     for file in all_files:
         if len(reg_exp.findall(file)) > 0:
             aim_file = reg_exp.findall(file)[0]
-    print(aim_file)
+    print('现在执行的是文档是：', aim_file)
     return aim_file
 
 
@@ -45,7 +45,7 @@ def connection_with_match_info(dataframe, dataframe_info):
     pd_detail = pd_detail.drop(['销售代表编码_y'], axis=1)
     pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', '支付宝账号认证人', '营业员绑定支付宝', 'UID']],
                                 how='left', left_on='销售代表编码', right_on='销售代表编码')
-    print(pd_detail.columns)
+
     pd_detail.rename(columns={'UID': '销售代表对应UID', '支付宝账号认证人': '销售代表支付宝账号认证人',
                               '营业员绑定支付宝': '销售代表支付宝'}, inplace=True)
     print(pd_detail.columns)
@@ -108,10 +108,11 @@ def output_uid(dataframe, indexx):
 # 用来补充新增字段
 def account_name_way(dataframe):
     # dataframe[['打款账户(营业员手机号/商户编码/销售代表编码)']] = dataframe[['打款账户(营业员手机号/商户编码/销售代表编码)']].astype('object')
-    dataframe[['日期']] = dataframe[['日期']].astype('object')
     for index in dataframe.index:
-        insert_date2 = str(dataframe.iloc[index: index + 1, 0:1].values[0][0])
+
+        insert_date2 = str(dataframe['日期'][index])
         insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
+
         insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
         get_contents = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][index]
         if type(get_contents) == type(1.00) :
@@ -119,6 +120,7 @@ def account_name_way(dataframe):
         insert_into_orderID = "A{a}_{b}".format(a=insert_date,
                                                 b = get_contents )
         dataframe['orderID(结算日期加营业员手机号)'][index] = insert_into_orderID
+
 
         if (dataframe['销售代表对应UID'][index] is not np.nan) & (dataframe['商户对应UID'][index] is np.nan) == True:
             dataframe['打款支付宝账户'][index] = str(dataframe['销售代表支付宝'][index])
@@ -145,6 +147,9 @@ def account_name_way(dataframe):
 
 
 def write_to_excel_a(dataframe, output_path):
+    
+    insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
+
     dataframe.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'匹配明细')
 
 
@@ -172,23 +177,19 @@ def write_to_excel_b(dataframe, output_path, pd_length):
     today_date = datetime.datetime.now().strftime('%Y%m%d')
 
     for i_index in range(pd_length):
-        # insert_date = dataframe.iloc[i_index:i_index+1,0:1].values
-        insert_date2 = str(dataframe.iloc[i_index:i_index + 1, 0:1].values[0][0])
-        # print(dataframe.iloc[i_index:i_index+1,0:1],insert_date,insert_date2)
-        insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
-        insert_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
+
+        insert_date = str(dataframe['日期'][i_index])
         get_contents = dataframe['打款账户(营业员手机号/商户编码/销售代表编码)'][i_index]
         if type(get_contents) == type(1.00) :
             get_contents = int(get_contents)
-        a = "A{a}_{b}".format(a=insert_date, b = get_contents)
+        insert_contents = "A{a}_{b}".format(a=insert_date, b = get_contents)
 
-        df['orderID(结算日期加营业员手机号)'][i_index] = a
+        df['orderID(结算日期加营业员手机号)'][i_index] = insert_contents
 
         df['payAccount(营业员支付宝UID)'][i_index] = dataframe['打款UID'][i_index]
         df['money(发好多钱)'][i_index] = dataframe['佣金'][i_index]
         df['remark(支付描述-日期-营业员手机号)'][i_index] = '支付宝拉新奖励_{a}_{b}'.format(a=insert_date,
-                                                                         b=dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][
-                                                                             i_index])
+                                                        b = dataframe['结算对象(营业员姓名/商户名称/销售代表名称)'][i_index])
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
     df['status(固定值0)'] = 0
@@ -253,17 +254,18 @@ if __name__ == '__main__':
     pd_detail = create_new_line(pd_detail, '结算日期')  # 新增
     pd_detail['结算日期'] = date
 
-    pd_detail[['日期']] = pd_detail[['日期']].astype('object')
 
-    insert_date2 = str(pd_detail.iloc[0:0 + 1, 0:1].values[0][0])
+    insert_date2 = str(pd_detail.loc[0:0,'日期'].values[0][0])
     insert_date = datetime.datetime.strptime(insert_date2, '%Y-%m-%d %H:%M:%S')
     laxin_date = datetime.datetime.strftime(insert_date, '%Y%m%d')
+    # laxin_date = pd_detail.loc[0:1,'日期']
 
     output_a_test = output_file_path + os.sep + '支付宝拉新佣金发放_{}.xlsx'.format(laxin_date)
 
-    write_to_excel_a(pd_detail, output_a_test)
-    print(pd_detail.head())
+
+    # print(pd_detail.head())
 
     pd_output = write_to_excel_b(pd_detail, output_b_test, pd_length=len(pd_detail))
+    write_to_excel_a(pd_detail, output_a_test)
     output_c_test = output_file_path + os.sep + '打款明细_{}.xlsx'.format(laxin_date)
     pivot_group_by(pd_output, output_c_test)
