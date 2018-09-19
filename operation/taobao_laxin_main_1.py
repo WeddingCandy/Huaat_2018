@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 def read_match_info(file , columns_match_info):
     pd_match_info = pd.read_excel(file,encoding = 'utf-8',header=0)
@@ -23,13 +25,12 @@ def search_new_input_file(file_path):
     aim_file =''
     for root, dirs, files in os.walk(file_path):
         all_files = files
-    # print(all_files,date)
     pattern1 = '[\u4e00-\u9fa5\w\s-]+{}\.xlsx'.format(date)
     reg_exp = re.compile(pattern1)
     for file in all_files:
         if len(reg_exp.findall(file))>0 :
             aim_file =reg_exp.findall(file)[0]
-    print(aim_file)
+    print('现在执行的是文档是：' , aim_file)
     return aim_file
 
 def connection_with_match_info(dataframe,dataframe_info):
@@ -42,11 +43,8 @@ def connection_with_match_info(dataframe,dataframe_info):
                               '营业员绑定支付宝': 'user_info商户支付宝' ,'销售代表编码_y':'user_info商户编码'}, inplace=True)   #
     pd_detail = pd_detail.drop(['user_info商户编码'], axis=1)
 
-    # print(pd_detail.head())
-
     pd_detail = pd_detail.merge(dataframe_info[['销售代表编码', '支付宝账号认证人','营业员绑定支付宝','UID']],
                                 how='left', left_on='销售代表编码', right_on='销售代表编码')
-
     pd_detail.rename(columns={'UID': '销售代表对应UID',
                               '支付宝账号认证人': 'user_info销售代表打款支付宝账户认证人',
                                 '营业员绑定支付宝':'user_info销售代表打款支付宝账户'}, inplace=True)
@@ -67,12 +65,9 @@ def create_new_line(dataframe,line_name):
     dataframe[line_name] = np.nan
     return dataframe
 
-def get_position_index(dataframe,line_index):
-    index = dataframe[dataframe.iloc[:, line_index].isnull().values == True].index.tolist()
-    return index
 
 
-def output_uid(dataframe,indexx):
+def match_uid(dataframe,indexx):
     for content in range(indexx):
         if (dataframe['商户对应UID'][content] is not np.nan ) & (dataframe['销售代表对应UID'][content] is not np.nan ) == True:
             dataframe['打款账户'][content] = dataframe['商户编码'][content]
@@ -99,7 +94,7 @@ def output_uid(dataframe,indexx):
             continue
     return dataframe
 
-def account_name_way(dataframe):
+def remarks_supplements(dataframe):
     for index in dataframe.index :
         insert_date2 = str( dataframe['日期'][index])
         insert_date = datetime.datetime.strptime(insert_date2, '%Y%m%d')
@@ -158,17 +153,11 @@ def write_to_excel_a(dataframe,output_path):
     for index in range(len(dataframe)):
         dataframe.loc[index:index, ['营业员UID']] = str(dataframe.loc[index:index,['营业员UID']].values[0][0])
         dataframe.loc[index:index, ['商户UID']] =  str(dataframe.loc[index:index, ['商户UID']].values[0][0])
-        # if index <3:
-        #     print(dataframe.loc[index:index,['营业员UID']].values[0][0])
     dataframe.to_excel(output_path,encoding='utf-8',index=False,sheet_name=r'匹配明细')
 
-def write_to_excel_c(dataframe,output_path):
-    dataframe.to_excel(output_path,sheet_name='佣金计算',encoding='utf-8',index=True,merge_cells=False)
 
-def write_to_excel_e(dataframe,output_path):
-    dataframe.to_excel(output_path,encoding='utf-8',index=False)
 
-def write_to_excel_d(dataframe,dict_path,output_path):
+def write_to_excel_c(dataframe,dict_path,output_path):
     date = datetime.datetime.now().strftime('%Y%m%d')
     with open(dict_path,encoding='utf-8') as f:
         dic_data = f.readlines()
@@ -187,7 +176,8 @@ def write_to_excel_d(dataframe,dict_path,output_path):
             continue
         file_name = output_path + os.sep + '{}_手淘拉新返点明细表_{}.xlsx'.format(date,region)
         print(file_name)
-        write_to_excel_e(df,file_name)
+        df.to_excel(file_name, encoding='utf-8', index=False)
+        print('完成输出')
 
 
 def empty_dataframe(shape,columns):
@@ -197,8 +187,7 @@ def empty_dataframe(shape,columns):
         df[content]=np.nan
     return df
 
-def write_to_excel_b(dataframe,output_path,pd_length):
-
+def create_transfer_details(dataframe,pd_length):
     columns = [ 'activityID(固定值120)', 'orderID(结算日期加营业员手机号)', 'agentID', 'businessID', 'shopID', 'assistant',
                'areaCode',
                'moneyType(固定值1)', 'payAccount(营业员支付宝UID)', 'payAccountName', 'money(发好多钱)', 'status(固定值0)',
@@ -206,10 +195,10 @@ def write_to_excel_b(dataframe,output_path,pd_length):
                'couponNO2', 'couponNO3', 'couponNO4', 'couponNO5', 'remark(支付描述-日期-营业员手机号)', 'delflag', 'payNo', 'payTime', 'payDetail']
     col_length = len(columns)
     df = empty_dataframe([pd_length,col_length],columns)
-    # today_date = datetime.datetime.now().strftime('%Y%m%d')
+
 
     for i_index in range(pd_length):
-        # insert_date = dataframe.iloc[i_index:i_index+1,0:1].values
+
         insert_date2 = str(dataframe['日期'][i_index])
         insert_date = datetime.datetime.strptime(insert_date2, '%Y%m%d')
         today_date = datetime.datetime.today()
@@ -237,8 +226,6 @@ def write_to_excel_b(dataframe,output_path,pd_length):
     df['activityID(固定值120)'] = 120
     df['moneyType(固定值1)'] = 1
     df['status(固定值0)'] = 0
-    # 需要输出b表把下面一句注释取消掉
-    # df.to_excel(output_path, encoding='utf-8', index=False, sheet_name=r'打款明细')
     return df
 
 def pivot_group_by(dataframe,output_path):
@@ -246,61 +233,63 @@ def pivot_group_by(dataframe,output_path):
     cols =  pd_output.columns.values.tolist()
     cols.remove('money(发好多钱)')
     y = pd.pivot_table(pd_output,index=cols,values = ['money(发好多钱)'],aggfunc=np.sum)
-    write_to_excel_c(y,output_path)
+    y.to_excel(output_path, sheet_name='佣金计算', encoding='utf-8', index=True, merge_cells=False)
+
 
 if __name__ == '__main__':
     # -----paths-----
-    date = datetime.datetime.now().strftime('%Y%m%d')
+    date = datetime.datetime.now().strftime('%Y%m%d')                                       #获取操作当日日期
     # input_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\input' # BY ylj
     # output_file_path = r'C:\Users\10854\Desktop\laxin\taoblx\output' # BY ylj
-    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'
-    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'
-    match_info = input_file_path + os.sep + 'match_info.xlsx'
-    dict_path = input_file_path + os.sep + '区域划分.csv'
-    output_a_test = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)
+    input_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/input'    #输入文件主路径
+    output_file_path = '/Users/Apple/Desktop/working/8 华院项目/运营自动化程序/taobao/output'  #输出文件主路径
+    match_info = input_file_path + os.sep + 'match_info.xlsx'                               #math_info 表的路径和名称
+    dict_path = input_file_path + os.sep + '区域划分.csv'                                    #区域划分表的路径和名称
 
-    file_name = search_new_input_file(input_file_path)
-    detail = input_file_path + os.sep + '{}'.format(file_name)
+
+    file_name = search_new_input_file(input_file_path)                                      #获取操作日日期的文件名
+    detail = input_file_path + os.sep + '{}'.format(file_name)                              #操作文件完整路径
 
     pd_match_info_aim = read_match_info(match_info ,
-                                        ['销售代表编码', '销售代表名称', '支付宝账号认证人', '营业员绑定支付宝', 'UID'])
-    pd_detail = read_detail(detail)
-    pd_detail = connection_with_match_info(pd_detail,pd_match_info_aim)
+                                        ['销售代表编码', '销售代表名称', '支付宝账号认证人', '营业员绑定支付宝', 'UID'])    #match_info要关联的字段，可以修改
+    pd_detail = read_detail(detail)    #读取Excel表到pandas
+    pd_detail = connection_with_match_info(pd_detail,pd_match_info_aim)         #把user_info表和原始表关联
 
 
-    pd_detail = create_new_line(pd_detail,'打款账户')
-    index1 = get_vacant_index(pd_detail,'商户对应UID')
-    index2 = get_vacant_index(pd_detail,'销售代表对应UID')
-    pd_detail = write_index_line(pd_detail,index1,'打款账户','商户支付宝账户')
-    pd_detail = write_index_line(pd_detail,index2,'打款账户','销售代表支付宝账户')
-    pd_detail = create_new_line(pd_detail,'打款UID')
+    pd_detail = create_new_line(pd_detail,'打款账户')                            #新建列
+    index1 = get_vacant_index(pd_detail,'商户对应UID')                           #获取对应字段空的行位置
+    index2 = get_vacant_index(pd_detail,'销售代表对应UID')                        #获取对应字段空的行位置
+    pd_detail = write_index_line(pd_detail,index1,'打款账户','商户支付宝账户')     #将非空行的数值传给'打款账户'
+    pd_detail = write_index_line(pd_detail,index2,'打款账户','销售代表支付宝账户')  #将非空行的数值传给'打款账户'
+    pd_detail = create_new_line(pd_detail,'打款UID')                             #新建列
 
 
     index3 = len(pd_detail)
-    pd_detail = output_uid(pd_detail,index3)
+    pd_detail = match_uid(pd_detail,index3)                                     #匹配三个角色的UID码
 
-    pd_detail = create_new_line(pd_detail,'打款支付宝账户')
-    pd_detail = create_new_line(pd_detail,'打款支付宝认证')
-    pd_detail = create_new_line(pd_detail,'备注：结算对象')
-    pd_detail = create_new_line(pd_detail, '备注2：结算方式')
-    pd_detail = create_new_line(pd_detail, '备注3：结佣批次')
-    pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)')  # 新增
+    pd_detail = create_new_line(pd_detail,'打款支付宝账户')                        #新建列
+    pd_detail = create_new_line(pd_detail,'打款支付宝认证')                        #新建列
+    pd_detail = create_new_line(pd_detail,'备注：结算对象')                        #新建列
+    pd_detail = create_new_line(pd_detail, '备注2：结算方式')                      #新建列
+    pd_detail = create_new_line(pd_detail, '备注3：结佣批次')                      #新建列
+    pd_detail = create_new_line(pd_detail, 'orderID(结算日期加营业员手机号)')       #新建列
 
-    pd_detail = account_name_way(pd_detail)
-    pd_detail = create_new_line(pd_detail, '结算日期')
-    pd_detail['结算日期'] = date
+    pd_detail = remarks_supplements(pd_detail)                                   #备注以及补充内容关联
+    pd_detail = create_new_line(pd_detail, '结算日期')                            #新建列
+    pd_detail['结算日期'] = date                                                  #添加结算日期
 
 
-    # 在此处输入DROP列的列名
+    # 在此处输入DROP列的列名，删除不需要的列，添加列名
     pd_detail = pd_detail.drop(['user_info商户支付宝账号认证人','user_info商户支付宝','user_info销售代表打款支付宝账户认证人',
                                 'user_info销售代表打款支付宝账户'], axis=1)
-    # pd_detail = pd_detail.drop(['',''], axis=1)
+
+    output_a_table = output_file_path + os.sep + '手淘拉新返点明细表_{}.xlsx'.format(date)  # a表输出名称和路径
+    write_to_excel_a(pd_detail,output_a_table)                                           #输出a表 《手淘拉新返点明细表》
+    print('手淘拉新返点明细表_{}.xlsx  已生成'.format(date) )
+    write_to_excel_c(pd_detail, dict_path, output_file_path)                             #输出各区域的《手淘拉新返点明细表》
 
 
-    write_to_excel_a(pd_detail,output_a_test)
-    write_to_excel_d(pd_detail, dict_path, output_file_path)
-
-    output_b_test = output_file_path + os.sep + 'output_test_b_{}.xlsx'.format(date)
-    pd_output = write_to_excel_b(pd_detail,output_b_test,pd_length=len(pd_detail))
-    output_c_test = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)
-    pivot_group_by(pd_output,output_c_test)
+    pd_output = create_transfer_details(pd_detail,pd_length=len(pd_detail))                 #生成《手淘拉新打款明细表》的关联
+    output_b_table = output_file_path + os.sep + '手淘拉新打款明细表_{}.xlsx'.format(date)     #生成《手淘拉新打款明细表》的输出路径和文件名
+    pivot_group_by(pd_output,output_b_table)                                                #输出《手淘拉新打款明细表》
+    print('手淘拉新打款明细表_{}.xlsx  已生成'.format(date))
